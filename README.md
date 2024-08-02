@@ -1,4 +1,6 @@
-Git criado para armazenar os avanços do curso de Pipeline de dados: combinando Python e orientação a objetos
+
+# Introdução
+Git criado para armazenar os avanços do curso de Pipeline de dados: combinando Python e orientação a objetos.
 
 # Arquivos
 1. processamento_dados.py: possui a codificação da inicialização e os métodos criados
