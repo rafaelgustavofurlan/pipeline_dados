@@ -41,19 +41,38 @@ class Dados:
         return dados
     
     # criando a funcao para listar as colunas
-    def get_columns (self):
-        return list(self.dados[-1].keys())
+    # def get_columns (self):
+    #     return list(self.dados[-1].keys())
     
+    def get_columns(self):
+        colunas = set()
+        for item in self.dados:
+            colunas.update(item.keys())
+        return list(colunas)
+
     # funcao para renomear colunas do arquivo csv
+    # def rename_columns(self, key_mapping):
+    #     new_dados = []
+    # 
+    #     for old_dict in self.dados:
+    #         dict_temp = {}
+    #         for old_key, value in old_dict.items():
+    #             dict_temp[key_mapping[old_key]] = value
+    #    new_dados.append(dict_temp)
+    # 
+    #    self.dados = new_dados
+    #    self.nome_colunas = self.get_columns()
+
     def rename_columns(self, key_mapping):
         new_dados = []
-
+ 
         for old_dict in self.dados:
             dict_temp = {}
             for old_key, value in old_dict.items():
-                dict_temp[key_mapping[old_key]] = value
-        new_dados.append(dict_temp)
-    
+                new_key = key_mapping.get(old_key, old_key)
+                dict_temp[new_key] = value
+            new_dados.append(dict_temp)
+        
         self.dados = new_dados
         self.nome_colunas = self.get_columns()
 
@@ -69,3 +88,24 @@ class Dados:
         combined_list.extend(dadosB.dados)
         
         return Dados(combined_list,'list')
+    
+    # transformar dados em tabela
+    def transformando_dados_tabela(self):
+        dados_combinados_tabela = [self.nome_colunas]
+
+        for row in self.dados:
+            linha = [] 
+            for coluna in self.nome_colunas:
+                linha.append(row.get(coluna, 'Indisponível'))
+            dados_combinados_tabela.append(linha)
+        
+        return dados_combinados_tabela
+    
+    # funcao para salvar no arquivo csv
+    def salvando_dados(self, path):
+        
+        dados_combinados_tabela = self.transformando_dados_tabela()
+
+        with open(path, 'w') as file:
+            writer = csv.writer(file)
+            writer.writerows(dados_combinados_tabela)
