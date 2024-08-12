@@ -1,6 +1,6 @@
 # importando bibliotecas
 # import json
-import csv
+# import csv
 from processamento_dados import Dados
 
 # leitura json
@@ -59,22 +59,22 @@ from processamento_dados import Dados
 #     return combined_list
 
 # transformar dados em tabela
-def transformando_dados_tabela(dados, nomes_colunas):
-    dados_combinados_tabela = [nomes_colunas]
-
-    for row in dados:
-        linha = [] 
-        for coluna in nomes_colunas:
-            linha.append(row.get(coluna, 'Indisponível'))
-        dados_combinados_tabela.append(linha)
-    
-    return dados_combinados_tabela
+# def transformando_dados_tabela(dados, nomes_colunas):
+#     dados_combinados_tabela = [nomes_colunas]
+# 
+#     for row in dados:
+#         linha = [] 
+#         for coluna in nomes_colunas:
+#            linha.append(row.get(coluna, 'Indisponível'))
+#         dados_combinados_tabela.append(linha)
+#     
+#     return dados_combinados_tabela
 
 # funcao para salvar no arquivo csv
-def salvando_dados(dados, path):
-    with open(path, 'w') as file:
-        writer = csv.writer(file)
-        writer.writerows(dados)
+# def salvando_dados(dados, path):
+#     with open(path, 'w') as file:
+#         writer = csv.writer(file)
+#         writer.writerows(dados)
 
 # definindo diretorio dos arquivos
 path_json = 'data_raw/dados_empresaA.json'
@@ -90,6 +90,7 @@ dados_empresaB = Dados(path_csv, 'csv')
 print(f'O nome das colunas da empresa B são: {dados_empresaB.nome_colunas}.')
 print(f'A quantidade de registros da empresa B é de {dados_empresaB.qtd_linhas} registros.')
 
+# renomeando as colunas de B
 key_mapping = {'Nome do Item': 'Nome do Produto',
                 'Classificação do Produto': 'Categoria do Produto',
                 'Valor em Reais (R$)': 'Preço do Produto (R$)',
@@ -98,13 +99,15 @@ key_mapping = {'Nome do Item': 'Nome do Produto',
                 'Data da Venda': 'Data da Venda'}
 
 dados_empresaB.rename_columns(key_mapping)
-# print(dados_empresaB.nome_colunas)
 
+# unindo os dados
 dados_fusao = Dados.join(dados_empresaA, dados_empresaB)
-# print(dados_fusao)
+print(dados_fusao.qtd_linhas)
+print(dados_fusao.nome_colunas)
 
-print(f'O nome das colunas da base fundida são: {dados_fusao.nome_colunas}.')
-print(f'A quantidade de registros da base fundida é de {dados_fusao.qtd_linhas} registros.')
+# load
+dados_fusao.salvando_dados(path_dados_combinados)
+print(path_dados_combinados)
 
 # iniciando a leitura
 # dados_json = leitura_dados(path_json,'json')
